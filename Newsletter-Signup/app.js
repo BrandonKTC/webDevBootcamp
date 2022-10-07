@@ -34,11 +34,11 @@ app.post("/", (req, res) => {
 	};
 	const jsonData = JSON.stringify(data);
 
-	const url = `https://us6.api.mailchimp.com/3.0/lists/97968b13e8`;
+	const url = `https://us6.api.mailchimp.com/3.0/lists/${process.env.ID}`;
 
 	const options = {
 		method: "POST",
-		auth: "brandon1:984d11706b2e57b25ecf4d25010c0b2a-us6",
+		auth: `brandon1:${process.env.API}`,
 	};
 
 	const request = https.request(url, options, (response) => {
@@ -62,8 +62,3 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
 	console.log(`Server listening on http://localhost:${PORT}`);
 });
-
-// API KEY
-// 984d11706b2e57b25ecf4d25010c0b2a-us6
-// List id
-// 97968b13e8
