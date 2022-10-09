@@ -39,6 +39,10 @@ app.get("/work", (req, res) => {
 	res.render("list", { listTitle: "Work List", items: workItems });
 });
 
+app.get("/about", (req, res) => {
+	res.render("about")
+})
+
 app.listen(process.env.PORT, () => {
 	console.log(`app listening on http://localhost:${process.env.PORT}`);
 });
