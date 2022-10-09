@@ -1,11 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const date = require(`${__dirname}/date.js`);
 require("dotenv").config();
 
 const app = express();
 
-let items = ["Read Limitless", "Becoming Limitless"];
-let workItems = [];
+const items = ["Read Limitless", "Becoming Limitless"];
+const workItems = [];
 
 app.set("view engine", "ejs");
 
@@ -14,7 +15,7 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 
 app.post("/", (req, res) => {
-	 if (req.body.list === "Work") {
+	if (req.body.list === "Work") {
 		workItems.push(req.body.newItem);
 		res.redirect("/work");
 	} else {
@@ -24,14 +25,7 @@ app.post("/", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-	let option = {
-		weekday: "long",
-		day: "numeric",
-		month: "long",
-	};
-	let today = new Date();
-	let day = today.toLocaleString("fr-FR", option);
-
+	const day = date.getDay();
 	res.render("list", { listTitle: day, items: items });
 });
 
@@ -40,8 +34,8 @@ app.get("/work", (req, res) => {
 });
 
 app.get("/about", (req, res) => {
-	res.render("about")
-})
+	res.render("about");
+});
 
 app.listen(process.env.PORT, () => {
 	console.log(`app listening on http://localhost:${process.env.PORT}`);
