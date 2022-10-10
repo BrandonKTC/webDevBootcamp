@@ -8,8 +8,8 @@
 - learn the latest technologies, including Javascript, React, Node and even Web3 development.
 - Master :
 
-* frontend development with React
-* backend development with Node
+  - frontend development with React
+  - backend development with Node
 
 - After the course you will be able to build ANY website you want.
 - Work as a freelance web developer.
