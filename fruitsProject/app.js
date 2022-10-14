@@ -36,33 +36,41 @@ const person = new Person({
 	age: 37,
 });
 
-// person.save();
+person.save();
 
-Fruit.find((err, fruits) => {
+Person.deleteMany({ name: "John" }, (err) => {
 	if (err) {
 		console.log(err);
 	} else {
-		fruits.forEach((fruit) => console.log("name: ", fruit.name));
-	}
-});
-
-Fruit.updateOne(
-	{ review: "Peaches are so yummy." },
-	{ name: "Peach" },
-	(err) => {
-		if (err) {
-			console.log(err);
-		} else {
-			console.log("Succesfully Update Doc.");
-		}
-	}
-);
-
-Fruit.deleteOne({ _id: "63492225c01df9b364b3e334" }, (err) => {
-	if (err) {
-		console.log(err);
-	} else {
-		console.log("Succesfully Delete item");
 		mongoose.connection.close();
+		console.log("Delete complete");
 	}
 });
+
+// Fruit.find((err, fruits) => {
+// 	if (err) {
+// 		console.log(err);
+// 	} else {
+// 		fruits.forEach((fruit) => console.log("name: ", fruit.name));
+// 	}
+// });
+
+// Fruit.updateOne(
+// 	{ review: "Peaches are so yummy." },
+// 	{ name: "Peach" },
+// 	(err) => {
+// 		if (err) {
+// 			console.log(err);
+// 		} else {
+// 			console.log("Succesfully Update Doc.");
+// 		}
+// 	}
+// );
+
+// Fruit.deleteOne({ _id: "63492225c01df9b364b3e334" }, (err) => {
+// 	if (err) {
+// 		console.log(err);
+// 	} else {
+// 		console.log("Succesfully Delete item");
+// 	}
+// });
