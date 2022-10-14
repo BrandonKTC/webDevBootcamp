@@ -1,6 +1,5 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const date = require(__dirname + "/date.js");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
@@ -17,9 +16,13 @@ mongoose.connect("mongodb://localhost:27017/todolistDB");
 const itemsSchema = new mongoose.Schema({
 	name: String,
 });
+const listSchema = new mongoose.Schema({
+	name: String,
+	items: [itemsSchema],
+});
 // create the model
 const Item = mongoose.model("Item", itemsSchema);
-const Work = mongoose.model("Work", itemsSchema);
+const List = mongoose.model("List", listSchema);
 
 const read = new Item({
 	name: "Read Limitless",
@@ -29,11 +32,12 @@ const be = new Item({
 	name: "Becoming Limitless",
 });
 
+const defaultItems = [read, be];
+
 app.get("/", function (req, res) {
-	const day = date.getDate();
 	const item = Item.find({}, (err, items) => {
 		if (items.length === 0) {
-			Item.insertMany([read, be], (err) => {
+			Item.insertMany(defaultItems, (err) => {
 				if (err) {
 					console.log(err);
 				} else {
@@ -41,17 +45,28 @@ app.get("/", function (req, res) {
 				}
 			});
 		}
-		res.render("list", { listTitle: day, newListItems: items });
+		res.render("list", { listTitle: "Today", newListItems: items });
 	});
 });
 
 app.post("/", function (req, res) {
+	const itemName = req.body.newItem;
+	const listName = req.body.list;
+
 	const item = new Item({
-		name: req.body.newItem,
+		name: itemName,
 	});
 
-	item.save();
-	res.redirect("/");
+	if (listName == "Today") {
+		item.save();
+		res.redirect("/");
+	} else {
+		List.findOne({ name: listName }, (err, foundlist) => {
+			foundlist.items.push(item);
+			foundlist.save();
+		});
+		res.redirect(`/${listName}`);
+	}
 });
 
 app.post("/delete", (req, res) => {
@@ -66,9 +81,24 @@ app.post("/delete", (req, res) => {
 	res.redirect("/");
 });
 
-app.get("/work", function (req, res) {
-	Work.find({}, (err, items) => {
-		res.render("list", { listTitle: "Work List", newListItems: items });
+app.get("/:route", (req, res) => {
+	const route = req.params.route;
+
+	List.findOne({ name: route }, (err, docs) => {
+		if (!err) {
+			if (!docs) {
+				// Create a new List
+				const list = new List({
+					name: route,
+					items: defaultItems,
+				});
+				list.save();
+				res.redirect(`/${route}`);
+			} else {
+				// render existing list
+				res.render("list", { listTitle: docs.name, newListItems: docs.items });
+			}
+		}
 	});
 });
 
