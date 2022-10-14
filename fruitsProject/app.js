@@ -22,7 +22,7 @@ const fruit = new Fruit({
 	review: "Peaches are so yummy.",
 });
 
-// fruit.save();
+fruit.save();
 
 const personSchema = new mongoose.Schema({
 	name: String,
