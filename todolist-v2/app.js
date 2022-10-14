@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const _ = require("lodash");
 require("dotenv").config();
 
 const app = express();
@@ -70,19 +71,33 @@ app.post("/", function (req, res) {
 });
 
 app.post("/delete", (req, res) => {
+	const listName = req.body.listName;
 	const id = req.body.checkbox;
-	Item.findByIdAndRemove(id, (err) => {
-		if (err) {
-			console.log(err);
-		} else {
-			console.log("Item Delete");
-		}
-	});
-	res.redirect("/");
+
+	if (listName === "Today") {
+		Item.findByIdAndRemove(id, (err) => {
+			if (err) {
+				console.log(err);
+			} else {
+				console.log("Item Delete");
+			}
+		});
+		res.redirect("/");
+	} else {
+		List.findOneAndUpdate(
+			{ name: listName },
+			{ $pull: { items: { _id: id } } },
+			(err) => {
+				if (!err) {
+					res.redirect(`/${listName}`);
+				}
+			}
+		);
+	}
 });
 
 app.get("/:route", (req, res) => {
-	const route = req.params.route;
+	const route = _.capitalize(req.params.route);
 
 	List.findOne({ name: route }, (err, docs) => {
 		if (!err) {
