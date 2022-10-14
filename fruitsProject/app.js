@@ -47,30 +47,24 @@ Person.deleteMany({ name: "John" }, (err) => {
 	}
 });
 
-// Fruit.find((err, fruits) => {
-// 	if (err) {
-// 		console.log(err);
-// 	} else {
-// 		fruits.forEach((fruit) => console.log("name: ", fruit.name));
-// 	}
-// });
+Fruit.updateOne(
+	{ review: "Peaches are so yummy." },
+	{ name: "Peach" },
+	(err) => {
+		if (err) {
+			console.log(err);
+		} else {
+			console.log("Succesfully Update Doc.");
+			mongoose.connection.close();
+		}
+	}
+);
 
-// Fruit.updateOne(
-// 	{ review: "Peaches are so yummy." },
-// 	{ name: "Peach" },
-// 	(err) => {
-// 		if (err) {
-// 			console.log(err);
-// 		} else {
-// 			console.log("Succesfully Update Doc.");
-// 		}
-// 	}
-// );
-
-// Fruit.deleteOne({ _id: "63492225c01df9b364b3e334" }, (err) => {
-// 	if (err) {
-// 		console.log(err);
-// 	} else {
-// 		console.log("Succesfully Delete item");
-// 	}
-// });
+Fruit.deleteOne({ _id: "63492225c01df9b364b3e334" }, (err) => {
+	if (err) {
+		console.log(err);
+	} else {
+		console.log("Succesfully Delete item");
+		mongoose.connection.close();
+	}
+});
