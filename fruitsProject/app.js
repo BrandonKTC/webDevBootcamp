@@ -54,7 +54,15 @@ Fruit.updateOne(
 			console.log(err);
 		} else {
 			console.log("Succesfully Update Doc.");
-			mongoose.connection.close();
 		}
 	}
 );
+
+Fruit.deleteOne({ _id: "63492225c01df9b364b3e334" }, (err) => {
+	if (err) {
+		console.log(err);
+	} else {
+		console.log("Succesfully Delete item");
+		mongoose.connection.close();
+	}
+});
