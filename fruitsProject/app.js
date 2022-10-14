@@ -22,6 +22,8 @@ const fruit = new Fruit({
 	review: "Peaches are so yummy.",
 });
 
+// fruit.save();
+
 const personSchema = new mongoose.Schema({
 	name: String,
 	age: Number,
