@@ -1,29 +1,66 @@
-const { MongoClient } = require("mongodb");
+const mongoose = require("mongoose");
 
-const url = "mongodb://localhost:27017";
+mongoose.connect("mongodb://localhost:27017/fruitsDB");
 
-const dbName = "myproject";
+const fruitSchema = new mongoose.Schema({
+	name: String,
+	rating: Number,
+	review: String,
+});
+const Fruit = mongoose.model("Fruit", fruitSchema);
 
-const client = new MongoClient(url);
+const fruit = new Fruit({
+	name: "Apple",
+	rating: 7,
+	review: "Pretty solid as a fruit.",
+});
 
-async function run() {
-	try {
-		const database = client.db("fruits_shop");
-		const fruits = database.collection("fruits");
+fruit.save();
 
-		await client.connect();
-		// Establish and verify connection
-		await client.db(dbName);
-		console.log("Connected successfully to server");
-	} finally {
-		// Ensures that the client will close when you finish/error
-		await client.close();
+const personSchema = new mongoose.Schema({
+	name: String,
+	age: Number,
+});
+
+const Person = mongoose.model("Person", personSchema);
+
+const person = new Person({
+	name: "John",
+	age: 37,
+});
+
+person.save();
+
+const kiwi = new Fruit({
+	name: "Kiwi",
+	rating: 10,
+	review: "The best fruit!",
+});
+
+const orange = new Fruit({
+	name: "Orange",
+	rating: 4,
+	review: "Too sour for me",
+});
+
+const banana = new Fruit({
+	name: "Banana",
+	rating: 3,
+	review: "Weird texture",
+});
+
+Fruit.insertMany([kiwi, orange, banana], (err) => {
+	if (err) {
+		console.log(err);
+	} else {
+		console.log("Succesfully saved all the fruits to fruitsDB");
 	}
-}
-run().catch(console.dir);
+});
 
-const collection = db.collection("fruits");
-
-const doc = { name: "Neapolitan pizza", shape: "round" };
-const result = await collection.insertOne(doc);
-console.log(`A document was inserted with the _id: ${result.insertedId}`);
+Fruit.find((err, fruits) => {
+	if (err) {
+		console.log(err);
+	} else {
+		console.log(fruits);
+	}
+});
