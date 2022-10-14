@@ -19,6 +19,7 @@ const itemsSchema = new mongoose.Schema({
 });
 // create the model
 const Item = mongoose.model("Item", itemsSchema);
+const Work = mongoose.model("Work", itemsSchema);
 
 const read = new Item({
 	name: "Read Limitless",
@@ -45,17 +46,30 @@ app.get("/", function (req, res) {
 });
 
 app.post("/", function (req, res) {
-	if (req.body.list === "Work") {
-		workItems.push(item);
-		res.redirect("/work");
-	} else {
-		items.push(item);
-		res.redirect("/");
-	}
+	const item = new Item({
+		name: req.body.newItem,
+	});
+
+	item.save();
+	res.redirect("/");
+});
+
+app.post("/delete", (req, res) => {
+	const id = req.body.checkbox;
+	Item.findByIdAndRemove(id, (err) => {
+		if (err) {
+			console.log(err);
+		} else {
+			console.log("Item Delete");
+		}
+	});
+	res.redirect("/");
 });
 
 app.get("/work", function (req, res) {
-	res.render("list", { listTitle: "Work List", newListItems: workItems });
+	Work.find({}, (err, items) => {
+		res.render("list", { listTitle: "Work List", newListItems: items });
+	});
 });
 
 app.get("/about", function (req, res) {
