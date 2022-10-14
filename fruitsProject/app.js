@@ -63,14 +63,32 @@ Person.updateOne({ name: "John" }, { favouriteFruit: strawberry }, (err) => {
 	}
 });
 
-// person.save();
+Fruit.updateOne(
+	{ review: "Peaches are so yummy." },
+	{ name: "Peach" },
+	(err) => {
+		if (err) {
+			console.log(err);
+		} else {
+			console.log("Succesfully Update Doc.");
+		}
+	}
+);
 
-// Person.deleteMany({ name: "John" }, (err) => {
+Fruit.deleteOne({ _id: "63492225c01df9b364b3e334" }, (err) => {
+	if (err) {
+		console.log(err);
+	} else {
+		console.log("Succesfully Delete item");
+		mongoose.connection.close();
+	}
+});
+
+// Fruit.find((err, fruits) => {
 // 	if (err) {
 // 		console.log(err);
 // 	} else {
-// 		mongoose.connection.close();
-// 		console.log("Delete complete");
+// 		fruits.forEach((fruit) => console.log("name: ", fruit.name));
 // 	}
 // });
 
@@ -82,7 +100,6 @@ Person.updateOne({ name: "John" }, { favouriteFruit: strawberry }, (err) => {
 // 			console.log(err);
 // 		} else {
 // 			console.log("Succesfully Update Doc.");
-// 			mongoose.connection.close();
 // 		}
 // 	}
 // );
@@ -92,6 +109,5 @@ Person.updateOne({ name: "John" }, { favouriteFruit: strawberry }, (err) => {
 // 		console.log(err);
 // 	} else {
 // 		console.log("Succesfully Delete item");
-// 		mongoose.connection.close();
 // 	}
 // });
