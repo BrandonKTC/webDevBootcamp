@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
 // create connection
-mongoose.connect("mongodb://localhost:27017/todolistDB");
+mongoose.connect(`${process.env.URI}`);
 // define the schema
 const itemsSchema = new mongoose.Schema({
 	name: String,
