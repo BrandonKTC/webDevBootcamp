@@ -1,14 +1,13 @@
 const mongoose = require("mongoose");
 const express = require("express");
-const bodyParser = require("body-parser");
 const ejs = require("ejs");
 require("dotenv").config();
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 app.use(express.static("public"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.set("view engine", "ejs");
 
@@ -58,18 +57,59 @@ app
 		});
 	});
 
-app.route("/articles/:articleTitle").get((req, res) => {
-	const articleTitle = req.params.articleTitle;
-	Article.findOne({ title: articleTitle }, (err, foundArticle) => {
-		if (!err) {
-			res.send(foundArticle);
-		} else {
-			res.send(err);
-		}
-	});
-});
-
 //////////////////// REQUESTS Targeting A Specific Article ////////////////////
+
+app
+	.route("/articles/:articleTitle")
+	.get((req, res) => {
+		const articleTitle = req.params.articleTitle;
+		Article.findOne({ title: articleTitle }, (err, foundArticle) => {
+			if (!err) {
+				res.send(foundArticle);
+			} else {
+				res.send(err);
+			}
+		});
+	})
+	.put((req, res) => {
+		Article.findOneAndReplace(
+			{ title: req.params.articleTitle },
+			{
+				title: req.body.title,
+				content: req.body.content,
+			},
+			{ overwrite: true },
+			(err) => {
+				if (!err) {
+					res.send("Successfully updated article.");
+				} else {
+					res.send(err);
+				}
+			}
+		);
+	})
+	.patch((req, res) => {
+		Article.findOneAndUpdate(
+			{ title: req.params.articleTitle },
+			{ $set: req.body },
+			(err) => {
+				if (!err) {
+					res.send("Successfully Updated Article");
+				} else {
+					res.send(err);
+				}
+			}
+		);
+	})
+	.delete((req, res) => {
+		Article.findOneAndDelete({ title: req.params.articleTitle }, (err) => {
+			if (!err) {
+				res.send(`Successfully delete ${req.params.articleTitle}`);
+			} else {
+				res.send(err);
+			}
+		});
+	});
 
 app.listen(process.env.PORT, () => {
 	console.log(`Server Listening on : http://localhost:${process.env.PORT}`);
