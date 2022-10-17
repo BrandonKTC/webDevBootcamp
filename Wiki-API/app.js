@@ -21,15 +21,55 @@ const articleSchema = new mongoose.Schema({
 
 const Article = mongoose.model("Article", articleSchema);
 
-app.get("/articles", (req, res) => {
-	Article.find({}, (err, foundArticles) => {
+//////////////////// REQUESTS Targeting All Articles ////////////////////
+
+app
+	.route("/articles")
+	.get((req, res) => {
+		Article.find({}, (err, foundArticles) => {
+			if (!err) {
+				res.send(foundArticles);
+			} else {
+				res.send(err);
+			}
+		});
+	})
+	.post((req, res) => {
+		const newArticle = new Article({
+			title: req.body.title,
+			content: req.body.content,
+		});
+
+		newArticle.save((err) => {
+			if (!err) {
+				res.send("Successfully Added a new Article.");
+			} else {
+				res.send(err);
+			}
+		});
+	})
+	.delete((req, res) => {
+		Article.deleteMany({}, (err) => {
+			if (!err) {
+				res.send("Everything has been deleted");
+			} else {
+				res.send(err);
+			}
+		});
+	});
+
+app.route("/articles/:articleTitle").get((req, res) => {
+	const articleTitle = req.params.articleTitle;
+	Article.findOne({ title: articleTitle }, (err, foundArticle) => {
 		if (!err) {
-			res.send(foundArticles);
+			res.send(foundArticle);
 		} else {
 			res.send(err);
 		}
 	});
 });
+
+//////////////////// REQUESTS Targeting A Specific Article ////////////////////
 
 app.listen(process.env.PORT, () => {
 	console.log(`Server Listening on : http://localhost:${process.env.PORT}`);
