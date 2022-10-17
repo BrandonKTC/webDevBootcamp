@@ -2,13 +2,13 @@ const mongoose = require("mongoose");
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
-const express = require("express");
 require("dotenv").config();
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(express.static("public"));
 
 app.set("view engine", "ejs");
 
@@ -19,10 +19,16 @@ const articleSchema = new mongoose.Schema({
 	content: String,
 });
 
-const Article = mongoose.model("articles", articleSchema);
+const Article = mongoose.model("Article", articleSchema);
 
-app.get("/", (req, res) => {
-	res.send("<h1>Hello World</h1>");
+app.get("/articles", (req, res) => {
+	Article.find({}, (err, foundArticles) => {
+		if (!err) {
+			res.send(foundArticles);
+		} else {
+			res.send(err);
+		}
+	});
 });
 
 app.listen(process.env.PORT, () => {
