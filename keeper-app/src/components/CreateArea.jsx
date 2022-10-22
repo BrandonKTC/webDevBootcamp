@@ -36,7 +36,7 @@ function CreateArea({ addItem }) {
 						setNote({ title: "", content: "" });
 					}}
 				>
-					Add
+					+
 				</button>
 			</form>
 		</div>
