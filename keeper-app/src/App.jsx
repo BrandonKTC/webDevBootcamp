@@ -13,12 +13,22 @@ function App() {
 		});
 	}
 
+	function onDelete(id) {
+		setItems((item) => item.filter((last, i) => i !== id));
+	}
+
 	return (
 		<div>
 			<Header />
 			<CreateArea addItem={addItem} />
 			{items.map((note, i) => (
-				<Note key={i} title={note.title} content={note.content} />
+				<Note
+					key={i}
+					id={i}
+					onDelete={onDelete}
+					title={note.title}
+					content={note.content}
+				/>
 			))}
 			<Footer />
 		</div>
