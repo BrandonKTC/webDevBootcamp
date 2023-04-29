@@ -1,6 +1,6 @@
 # webDevBootcamp
 
-## [The Complete 2023 Web Development Bootcamp](https://www.udemy.com/course/the-complete-web-development-bootcamp/)
+## The Complete 2023 Web Development Bootcamp
 
 - build 16 web development projects for your portfolio
 - master both front and back-end development, becoming a full-stack developer by the end of the course.
@@ -13,3 +13,5 @@
 
 - After the course you will be able to build ANY website you want.
 - Work as a freelance web developer.
+
+[The Complete 2023 Web Development Bootcamp](https://www.udemy.com/course/the-complete-web-development-bootcamp/) by Angela Yu on Udemy
